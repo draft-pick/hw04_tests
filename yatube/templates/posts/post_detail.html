@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="row">
+        <aside class="col-12 col-md-3">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    Дата публикации: {{ view_post.pub_date }}
+                </li>
+                {% if view_post.group %}
+                    <li class="list-group-item">
+                        Группа: {{ view_post.group }}
+                        <a href="{% url 'posts:group_list' view_post.group.slug %}">
+                            все записи группы
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="list-group-item">
+                    Автор:
+                    <a href="{% url 'posts:profile' view_post.author.username %}">
+                        {{ view_post.author.first_name }}
+                        {{ view_post.author.last_name }}
+                    </a>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Всего постов автора: <span>{{ view_post.author.posts.all.count }}</span>
+                </li>
+                <li class="list-group-item">
+                    <a href="{% url 'posts:profile' view_post.author.username %}">
+                        все посты пользователя
+                    </a>
+                </li>
+                {% if request.user.pk == view_post.author.pk %}
+                    <li class="list-group-item">
+                        <a href="{% url 'posts:post_edit' view_post.pk %}">
+                            Изменить пост
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </aside>
+        <article class="col-12 col-md-9">
+            <p>
+                {{ view_post.text }}
+            </p>
+        </article>
+    </div>
+{% endblock %}
