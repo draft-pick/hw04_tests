@@ -3,7 +3,6 @@ import datetime as dt
 from django.test import Client, TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from ..forms import PostForm
 
 from ..models import Group, Post
 

@@ -31,7 +31,3 @@ class PostModelTest(TestCase):
         task = PostModelTest.post
         expected_post = task.text
         self.assertEqual(expected_post, str(task))
-
-
-
-

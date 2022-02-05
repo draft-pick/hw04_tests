@@ -1,4 +1,3 @@
-# deals/tests/test_views.py
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -28,27 +27,23 @@ class PostPagesTests(TestCase):
             group=self.group
         )
         self.templates_pages_names = {
-            'posts/index.html': reverse('posts:index'),
-            'posts/group_list.html': (
-                reverse('posts:group_list', kwargs={'slug': self.group.slug})
-            ),
-            'posts/profile.html': (
-                reverse('posts:profile', kwargs={'username': self.user})
-            ),
-            'posts/post_detail.html': (
-                reverse('posts:post_detail', kwargs={'post_id': self.post.pk})
-            ),
-            'posts/create_post.html': (
-                reverse('posts:post_edit', kwargs={'post_id': self.post.pk})
-            ),
-            'posts/create_post.html': reverse('posts:post_create'),
+            reverse('posts:index'): 'posts/index.html',
+            reverse('posts:group_list', kwargs={'slug': self.group.slug}):
+                'posts/group_list.html',
+            reverse('posts:profile', kwargs={'username': self.user}):
+                'posts/profile.html',
+            reverse('posts:post_detail', kwargs={'post_id': self.post.pk}):
+                'posts/post_detail.html',
+            reverse('posts:post_edit', kwargs={'post_id': self.post.pk}):
+                'posts/create_post.html',
+            reverse('posts:post_create'): 'posts/create_post.html',
 
         }
 
     def test_pages_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""
 
-        for template, reverse_name in self.templates_pages_names.items():
+        for reverse_name, template in self.templates_pages_names.items():
             with self.subTest(reverse_name=reverse_name):
                 response = self.authorized_client.get(reverse_name)
                 self.assertTemplateUsed(response, template)
@@ -204,7 +199,8 @@ class PaginatorViewsTest(TestCase):
 
     def test_second_page_contains_three_records_group_list(self):
         response = self.client.get(
-            reverse('posts:group_list', kwargs={'slug': self.group.slug}) + '?page=2'
+            reverse('posts:group_list',
+                    kwargs={'slug': self.group.slug}) + '?page=2'
         )
         self.assertEqual(len(response.context['page_obj']), 3)
 
@@ -216,6 +212,7 @@ class PaginatorViewsTest(TestCase):
 
     def test_second_page_contains_three_records_profile(self):
         response = self.client.get(
-            reverse('posts:profile', kwargs={'username': self.user}) + '?page=2'
+            reverse('posts:profile',
+                    kwargs={'username': self.user}) + '?page=2'
         )
         self.assertEqual(len(response.context['page_obj']), 3)

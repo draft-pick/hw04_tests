@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 
-from posts.models import Post, Group
+from ..models import Post, Group
 
 User = get_user_model()
 
@@ -31,8 +31,8 @@ class PostURLTests(TestCase):
             'posts/post_detail.html': f'/posts/{self.post.pk}/',
         }
         self.templates_url_authorized_client_url = {
-            'posts/create_post.html': f'/posts/{self.post.pk}/edit/',
-            'posts/create_post.html': f'/create/',
+            f'/posts/{self.post.pk}/edit/': 'posts/create_post.html',
+            '/create/': 'posts/create_post.html',
         }
 
     def test_urls_guest_client_correct_template(self):
@@ -44,10 +44,9 @@ class PostURLTests(TestCase):
 
     def test_urls_authorized_client_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""
-        for template, address in self.templates_url_authorized_client_url.items():
+        for address, template in (
+                self.templates_url_authorized_client_url.items()
+        ):
             with self.subTest(address=address):
                 response = self.authorized_client.get(address, follow=True)
                 self.assertTemplateUsed(response, template)
-
-
-
