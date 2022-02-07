@@ -148,6 +148,8 @@ class PaginatorViewsTest(TestCase):
         self.authorized_client.force_login(self.user)
 
     def test_paginator_index_group_list_profile(self):
+        """Проверка пагинации на url: index, group_list, profile."""
+
         len_page = settings.PAGINATOR_POST_COUNT
         len_page_2 = Post.objects.count() - len_page
         paginator_context = {
