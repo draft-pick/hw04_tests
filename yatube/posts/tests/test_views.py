@@ -56,7 +56,8 @@ class PostPagesTests(TestCase):
     def test_pages_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""
 
-        template_pages_all = {**self.templates_pages_obj, **self.templates_pages}
+        template_pages_all = {**self.templates_pages_obj,
+                              **self.templates_pages}
         for reverse_name, template in template_pages_all.items():
             with self.subTest(reverse_name=reverse_name):
                 response = self.authorized_client.get(reverse_name)
