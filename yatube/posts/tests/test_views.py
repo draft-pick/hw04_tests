@@ -156,18 +156,20 @@ class PaginatorViewsTest(TestCase):
         """Проверка пагинации на url: index, group_list, profile."""
 
         len_page = settings.PAGINATOR_POST_COUNT
-        len_page_2 = Post.objects.count() - len_page
+        len_page_2 = Post.objects.count() % len_page
+        second_page = 2
         paginator_context = {
             reverse('posts:index'): len_page,
-            reverse('posts:index') + '?page=2': len_page_2,
+            reverse('posts:index') + f'?page={second_page}': len_page_2,
             reverse('posts:group_list', kwargs={'slug': self.group.slug}):
                 len_page,
             reverse('posts:group_list',
-                    kwargs={'slug': self.group.slug}) + '?page=2': len_page_2,
+                    kwargs={'slug': self.group.slug}) + f'?page={second_page}':
+                len_page_2,
             reverse('posts:profile', kwargs={'username': self.user}):
                 len_page,
             reverse('posts:profile',
-                    kwargs={'username': self.user}) + '?page=2':
+                    kwargs={'username': self.user}) + f'?page={second_page}':
                 len_page_2
         }
         for requested_page, page_len in paginator_context.items():
