@@ -28,6 +28,6 @@ class PostModelTest(TestCase):
         expected_group = test_group.title
         self.assertEqual(expected_group, str(test_group))
 
-        test_group = PostModelTest.post
-        expected_post = test_group.text
-        self.assertEqual(expected_post, str(test_group))
+        test_post = PostModelTest.post
+        expected_post = test_post.text
+        self.assertEqual(expected_post, str(test_post))

@@ -138,11 +138,11 @@ class PaginatorViewsTest(TestCase):
         cls.group = Group.objects.create(
             title='Тестовая группа',
             slug='test_group', )
-        posts = [Post(
+        cls.posts = [Post(
             text=f'Тестовый текст{i}',
             author=cls.user,
             group=cls.group) for i in range(13)]
-        Post.objects.bulk_create(posts)
+        Post.objects.bulk_create(cls.posts)
 
     def setUp(self):
         self.authorized_client = Client()
@@ -152,7 +152,7 @@ class PaginatorViewsTest(TestCase):
         """Проверка пагинации на url: index, group_list, profile."""
 
         len_page = settings.PAGINATOR_POST_COUNT
-        len_page_2 = Post.objects.count() - len_page
+        len_page_2 = self.posts.count - len_page
         paginator_context = {
             reverse('posts:index'): len_page,
             reverse('posts:index') + '?page=2': len_page_2,

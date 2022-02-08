@@ -43,20 +43,16 @@ class PostFormTests(TestCase):
             response, reverse('posts:profile', kwargs={'username': self.user})
         )
         self.assertEqual(Post.objects.count(), posts_count + 1)
-        self.assertTrue(
-            Post.objects.filter(
-                id=PostFormTests.post.id,
-                text=PostFormTests.post.text,
-                group=self.group.pk,
-            ).exists()
-        )
+        post = Post.objects.latest('id')
+        self.assertTrue(post.text == form_data['text'])
+        self.assertTrue(post.group_id == form_data['group'])
 
     def test_edit_post(self):
         """Валидная форма редактирует запись в Post."""
 
         posts_count = Post.objects.count()
         form_data = {
-            'text': PostFormTests.post.text,
+            'text': 'Просто текст',
             'group': self.group.id,
         }
         response = self.authorized_client.post(
@@ -71,8 +67,8 @@ class PostFormTests(TestCase):
         self.assertEqual(Post.objects.count(), posts_count)
         self.assertTrue(
             Post.objects.filter(
-                id=PostFormTests.post.id,
+                id=PostFormTests.post.pk,
                 text=form_data['text'],
-                group=self.group.id,
+                group=form_data['group'],
             ).exists()
         )
